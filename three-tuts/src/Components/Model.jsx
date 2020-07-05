@@ -1,6 +1,7 @@
-import React, { Component, useMemo, useRef, useState } from "react";
+import React, { Component, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "react-three-fiber";
-import { TextureLoader } from "three";
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import Controls from "./Controls";
 import bumperURL from "./images/marsbump1k.jpg";
 import marsURL from "./images/marsmap1k.jpg";
@@ -8,8 +9,15 @@ import "./Model.css";
 import StartPage from "./Startpage";
 
 console.log(bumperURL);
+const SpaceShip = () => {
+  const [model, setModel] = useState();
 
-var THREE = require("three");
+  useEffect(() => {
+    new GLTFLoader().load("/scene.gltf", setModel);
+  });
+
+  return model ? <primitive object={model.scene} /> : null;
+};
 
 class Model extends Component {
   constructor(props) {
@@ -25,9 +33,12 @@ class Model extends Component {
 
   render() {
     const { data } = this.state;
+    //<SpaceShip />
+    //
     //console.log(data);
     return (
       //  Sonali startpage.jsx controls the design element of the page.
+
       <>
         <StartPage />
         <Canvas camera={{ position: [0, 0, 20] }}>
@@ -58,8 +69,10 @@ function Mars(props) {
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  const imgmars = useMemo(() => new TextureLoader().load(marsURL), [marsURL]);
-  const bumpmap = useMemo(() => new TextureLoader().load(bumperURL), [
+  const imgmars = useMemo(() => new THREE.TextureLoader().load(marsURL), [
+    marsURL,
+  ]);
+  const bumpmap = useMemo(() => new THREE.TextureLoader().load(bumperURL), [
     bumperURL,
   ]);
   console.log(marsURL);
