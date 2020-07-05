@@ -59,13 +59,13 @@ function Mars(props) {
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
   const imgmars = useMemo(() => new TextureLoader().load(marsURL), [marsURL]);
-  const bumpmap = useMemo(() => new TextureLoader().load(bumperURL), [
+  const bumpmap1 = useMemo(() => new TextureLoader().load(bumperURL), [
     bumperURL,
   ]);
   console.log(marsURL);
 
   // Rotate mesh every frame, this is outside of React without overhead
-  useFrame(() => (mesh.current.rotation.y += 0.01));
+  useFrame(() => (mesh.current.rotation.y += 0.006));
 
   return (
     <mesh
@@ -81,7 +81,7 @@ function Mars(props) {
         attach="material"
         //color={hovered ? "hotpink" : "orange"}
         map={imgmars}
-        bumpmap={bumperURL}
+        bumpmap={bumpmap1}
         bumpscale={0.1}
       />
     </mesh>
