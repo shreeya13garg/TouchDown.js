@@ -15,6 +15,7 @@ canvas {
   left: 0;
   width: 100vw;
   height: 80vh;
+  z-index: -1;
 }
 .text-box {
   font-size: 30px;
