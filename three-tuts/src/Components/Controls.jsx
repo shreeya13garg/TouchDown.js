@@ -9,7 +9,6 @@ extend({ OrbitControls });
 function Controls() {
   const controlsRef = useRef();
   const { camera, gl, size } = useThree();
-  console.log(size);
 
   useFrame(() => controlsRef.current && controlsRef.current.update());
 
@@ -19,6 +18,8 @@ function Controls() {
       args={[camera, gl.domElement]}
       //enableRotate
       //enablePan={false}
+      //maxPolarAngle={Math.PI / 3}
+      //minPolarAngle={Math.PI}
     />
   );
 }
