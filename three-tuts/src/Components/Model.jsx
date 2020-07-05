@@ -69,15 +69,10 @@ function Mars(props) {
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-<<<<<<< HEAD
   const imgmars = useMemo(() => new THREE.TextureLoader().load(marsURL), [
     marsURL,
   ]);
   const bumpmap = useMemo(() => new THREE.TextureLoader().load(bumperURL), [
-=======
-  const imgmars = useMemo(() => new TextureLoader().load(marsURL), [marsURL]);
-  const bumpmap1 = useMemo(() => new TextureLoader().load(bumperURL), [
->>>>>>> master
     bumperURL,
   ]);
   console.log(marsURL);
