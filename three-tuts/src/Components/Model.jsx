@@ -33,11 +33,12 @@ class Model extends Component {
 
   render() {
     const { data } = this.state;
-    //<SpaceShip />
+    //
     //
     //console.log(data);
     return (
       //  Sonali startpage.jsx controls the design element of the page.
+      //<SpaceShip />
 
       <>
         <StartPage />
@@ -72,7 +73,7 @@ function Mars(props) {
   const imgmars = useMemo(() => new THREE.TextureLoader().load(marsURL), [
     marsURL,
   ]);
-  const bumpmap = useMemo(() => new THREE.TextureLoader().load(bumperURL), [
+  const bumpmap1 = useMemo(() => new THREE.TextureLoader().load(bumperURL), [
     bumperURL,
   ]);
   console.log(marsURL);
@@ -84,15 +85,16 @@ function Mars(props) {
     <mesh
       {...props}
       ref={mesh}
-      scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
+      scale={active ? [2.0, 2.0, 2.0] : [1, 1, 1]}
       onClick={(e) => setActive(!active)}
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}
+      className="Mars"
     >
       <sphereGeometry attach="geometry" args={[6, 26, 26]} />
       <meshStandardMaterial
         attach="material"
-        //color={hovered ? "hotpink" : "orange"}
+        color={hovered ? "hotpink" : "orange"}
         map={imgmars}
         bumpmap={bumpmap1}
         bumpscale={0.1}
