@@ -1,12 +1,15 @@
 import React, { Component } from "react";
-import Node from "./Node";
-import { dijkstra, getNodesInShortestPathOrder } from "./algorithms/dijkstra";
-//import { bfs } from "./algorithms/bfs";
-import { Iastar } from "./algorithms/Iastar";
-import { astar } from "./astar";
+import { Astar } from "./algorithms/astar";
 import { Bestfs } from "./algorithms/Bestfs";
+import { bfs } from "./algorithms/bfs";
+import { dijkstra, getNodesInShortestPathOrder } from "./algorithms/dijkstra";
+import { Iastar } from "./algorithms/Iastar";
 import { IBestfs } from "./algorithms/IBestfs";
 import { IDAstar } from "./algorithms/IDAstar";
+import { jps, jpsans } from "./algorithms/jps";
+import { orthJPS, orthogonalans } from "./algorithms/orthJPS";
+import { Orth_Astar } from "./algorithms/orth_astar";
+import Node from "./Node";
 import "./PathfindingVisualizer.css";
 
 const START_NODE_ROW = 10;
@@ -43,7 +46,7 @@ export default class PathfindingVisualizer extends Component {
     this.setState({ mouseIsPressed: false });
   }
 
-  animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+  animate(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -53,7 +56,8 @@ export default class PathfindingVisualizer extends Component {
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className = "node node-visited";
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-visited";
       }, 10 * i);
     }
   }
@@ -62,12 +66,13 @@ export default class PathfindingVisualizer extends Component {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className = "node node-shortest-path";
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-shortest-path";
       }, 50 * i);
     }
   }
 
-  visualizeDijkstra() {
+  visualize() {
     const { grid } = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
@@ -75,18 +80,8 @@ export default class PathfindingVisualizer extends Component {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     console.log(visitedNodesInOrder);
     console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
   }
-  /*visualizeBFS() {
-    const { grid } = this.state;
-    const startNode = grid[START_NODE_ROW][START_NODE_COL];
-    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    const visitedNodesInOrder = bfs(grid, startNode, finishNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    console.log(visitedNodesInOrder);
-    console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  }*/
   visualizeIntelligentAstar() {
     const { grid } = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
@@ -96,7 +91,7 @@ export default class PathfindingVisualizer extends Component {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     console.log(visitedNodesInOrder);
     console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
   }
   visualizeBestfs() {
     const { grid } = this.state;
@@ -107,18 +102,7 @@ export default class PathfindingVisualizer extends Component {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     console.log(visitedNodesInOrder);
     console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  }
-  visualizeAstar() {
-    const { grid } = this.state;
-    const startNode = grid[START_NODE_ROW][START_NODE_COL];
-    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    var heuristic = "Manhattan";
-    const visitedNodesInOrder = astar(grid, startNode, finishNode, heuristic);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    console.log(visitedNodesInOrder);
-    console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
   }
   visualizeIBestfs() {
     const { grid } = this.state;
@@ -129,7 +113,7 @@ export default class PathfindingVisualizer extends Component {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     console.log(visitedNodesInOrder);
     console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
   visualizeIDAstar() {
@@ -141,22 +125,84 @@ export default class PathfindingVisualizer extends Component {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
     console.log(visitedNodesInOrder);
     console.log(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
   }
-
+  visualizeBFS() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = bfs(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+  visualizeOrthAstar() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = Orth_Astar(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+  visualizeAstar() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = Astar(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+  visualizeJPS() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = jps(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = jpsans(finishNode, grid);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+  visualizeOrthJPS() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = orthJPS(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = orthogonalans(finishNode, grid);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
   render() {
     const { grid, mouseIsPressed } = this.state;
 
     return (
       <>
-        <button onClick={() => this.visualizeDijkstra()}>Visualize Dijkstra's Algorithm</button>
-        <button onClick={() => this.visualizeBFS()}>Visualize BFS Algorithm</button>
-        <button onClick={() => this.visualizeIntelligentAstar()}>Visualize Intelligent A star algorithm</button>
-        <button onClick={() => this.visualizeAstar()}>Visualize A star Algorithm</button>
-        <button onClick={() => this.visualizeBestfs()}>Visualize Best First Search Algorithm</button>
-        <button onClick={() => this.visualizeIBestfs()}>Visualize Intelligent Best First Search</button>
-        <button onClick={() => this.visualizeIDAstar()}>Visualize IDA star</button>
-        <div className='grid'>
+        <button onClick={() => this.visualizeBFS()}>
+          Visualize BFS Algorithm
+        </button>
+        <button onClick={() => this.visualizeAstar()}>
+          Visualize Astar Algorithm
+        </button>
+        <button onClick={() => this.visualizeOrthAstar()}>
+          Visualize Orthogonal Astar(diagonals not allowed) Algorithm
+        </button>
+        <button onClick={() => this.visualizeJPS()}>
+          Visualize JPS Algorithm
+        </button>
+        <button onClick={() => this.visualizeOrthJPS()}>
+          Visualize OrthJPS Algorithm
+        </button>
+        <button onClick={() => this.visualizeDijkstra()}>
+          Visualize Dijkstra's Algorithm
+        </button>
+        <button onClick={() => this.visualizeIntelligentAstar()}>
+          Visualize Intelligent A star algorithm
+        </button>
+        <button onClick={() => this.visualizeBestfs()}>
+          Visualize Best First Search Algorithm
+        </button>
+        <button onClick={() => this.visualizeIBestfs()}>
+          Visualize Intelligent Best First Search
+        </button>
+        <button onClick={() => this.visualizeIDAstar()}>
+          Visualize IDA star
+        </button>
+        <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
               <div key={rowIdx}>
@@ -171,7 +217,9 @@ export default class PathfindingVisualizer extends Component {
                       isWall={isWall}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                      onMouseEnter={(row, col) =>
+                        this.handleMouseEnter(row, col)
+                      }
                       onMouseUp={() => this.handleMouseUp()}
                       row={row}
                     ></Node>
