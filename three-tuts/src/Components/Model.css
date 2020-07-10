@@ -65,15 +65,9 @@ canvas {
   background: black;
   cursor: pointer;
 }
-.Mars {
-  animation: zoom 1s linear;
-}
-
-@keyframes zoom {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
+.canvas-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
