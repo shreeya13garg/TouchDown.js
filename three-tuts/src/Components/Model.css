@@ -1,0 +1,73 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  background-image: url(images/background.png);
+  /*background: black;*/
+  /*overflow: hidden;*/
+  /*display: flex;*/
+  /*justify-content: center;*/
+  align-items: center;
+}
+canvas {
+  position: static;
+  top: 200;
+  left: 0;
+  width: 100vw;
+  height: 80vh;
+  z-index: -1;
+}
+.text-box {
+  font-size: 30px;
+  font-family: "Raleway", sans-serif;
+  letter-spacing: 7px;
+  word-spacing: 12px;
+  padding-left: 10px;
+  /*position: fixed;*/
+  /*text-transform: uppercase;*/
+  color: rgb(238, 238, 238);
+}
+.text-box2 {
+  font-size: 12px;
+  font-family: "Raleway", sans-serif;
+  letter-spacing: 2px;
+  word-spacing: 5px;
+  vertical-align: text-top;
+  /*text-transform: uppercase;*/
+  color: rgb(238, 238, 238);
+}
+.text-box3 {
+  font-size: 18px;
+  font-family: "Raleway", sans-serif;
+  letter-spacing: 2px;
+  word-spacing: 5px;
+  /*text-transform: uppercase;*/
+  color: rgb(238, 238, 238);
+}
+.button-wrapper {
+  display: flex;
+  /*justify-content: left;*/
+  /*align-items: center;*/
+  padding-top: 10px;
+  padding-left: 0px;
+  flex-direction: row;
+}
+.button {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  margin-right: 20px;
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background: black;
+  cursor: pointer;
+}
+.canvas-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
