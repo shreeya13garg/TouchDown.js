@@ -24,7 +24,7 @@ export default class Point extends Component {
     //   : '';
 
     return (
-      <mesh position={[col, row, 0]} rotation={[Math.PI * 0.5, 0, 0]}>
+      <mesh position={[col - 5, row - 5, 0]} rotation={[Math.PI * 0.5, 0, 0]}>
         <boxBufferGeometry attach="geometry" args={[1, 1, 0]} />
         <meshStandardMaterial attach="material" color="#fff" />
       </mesh>
