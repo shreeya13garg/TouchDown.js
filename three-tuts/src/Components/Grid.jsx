@@ -1,54 +1,84 @@
-import React from "react";
+import React, { Component } from "react";
 import { Canvas } from "react-three-fiber";
+import { bfs } from "./algorithms/bfs";
+import { getNodesInShortestPathOrder } from "./algorithms/dijkstra";
 import Controls from "./Controls";
 import Point from "./Point";
 
-const Grid = ({}) => {
-  const grid = getInitialGrid();
-  console.log(grid);
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 10] }}
-      onCreated={({ camera }) => camera.lookAt(100, 100, 4)}
-    >
-      <Controls />
-      <ambientLight color="#ffffff" intensity={0.1} />
-      <hemisphereLight
-        color="#ffffff"
-        skyColor="#ffffbb"
-        groundColor="#080820"
-        intensity={1.0}
-      />
-      {grid.map((row, rowIdx) => {
-        return (
-          <>
-            {row.map((node, nodeIdx) => {
-              const { row, col, isWall } = node;
-              return (
-                <Point
-                  key={nodeIdx}
-                  col={col}
-                  //isFinish={isFinish}
-                  //isStart={isStart}
-                  isWall={isWall}
-                  //mouseIsPressed={mouseIsPressed}
-                  onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                  onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
-                  onMouseUp={() => this.handleMouseUp()}
-                  row={row}
-                ></Point>
-                // <mesh position={[col, row, 0]} rotation={[Math.PI * 0.5, 0, 0]}>
-                //   <boxBufferGeometry attach="geometry" args={[1, 1, 0]} />
-                //   <meshStandardMaterial attach="material" color="white" />
-                // </mesh>
-              );
-            })}
-          </>
-        );
-      })}
-    </Canvas>
-  );
-};
+const START_NODE_ROW = 10;
+const START_NODE_COL = 15;
+const FINISH_NODE_ROW = 10;
+const FINISH_NODE_COL = 35;
+
+export default class Grid extends Component {
+  constructor() {
+    super();
+    this.state = {
+      grid: [],
+      mouseIsPressed: false,
+    };
+  }
+  componentDidMount() {
+    const grid = getInitialGrid();
+    this.setState({ grid });
+  }
+
+  visualizeBFS() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = bfs(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
+  render() {
+    const { grid, mouseIsPressed } = this.state;
+    console.log(grid);
+    return (
+      <>
+        <Canvas
+          camera={{ position: [0, 0, 10] }}
+          onCreated={({ camera }) => camera.lookAt(100, 100, 4)}
+        >
+          <ambientLight color="#ffffff" intensity={0.1} />
+          <hemisphereLight
+            color="#ffffff"
+            skyColor="#ffffbb"
+            groundColor="#080820"
+            intensity={1.0}
+          />
+          <Controls />
+          {grid.map((row, rowIdx) => {
+            return (
+              <mesh key={rowIdx}>
+                {row.map((node, nodeIdx) => {
+                  const { row, col, isWall } = node;
+                  return (
+                    <Point
+                      key={nodeIdx}
+                      col={col}
+                      // isFinish={isFinish}
+                      //   //isStart={isStart}
+                      isWall={isWall}
+                      mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      onMouseEnter={(row, col) =>
+                        this.handleMouseEnter(row, col)
+                      }
+                      onMouseUp={() => this.handleMouseUp()}
+                      row={row}
+                    />
+                  );
+                })}
+              </mesh>
+            );
+          })}
+        </Canvas>
+      </>
+    );
+  }
+}
 
 const getInitialGrid = () => {
   const grid = [];
@@ -78,5 +108,3 @@ const createNode = (col, row, numCols, numRows) => {
     previousNode: null,
   };
 };
-
-export default Grid;
