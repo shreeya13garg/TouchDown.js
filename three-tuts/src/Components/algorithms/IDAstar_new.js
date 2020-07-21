@@ -1,128 +1,130 @@
-
-export function IDAstar(grid, startNode, finishNode,heuristic) 
-{
-    var string="Manhattan";
-    var string2="Diagonal";
-    var string3="Euclidean";
-    var threshold;
-    if(heuristic.localeCompare(string)==0)
-    {
-        threshold=Math.abs(startNode.row-finishNode.row)+Math.abs(startNode.col-finishNode.col);
-        //console.log(threshold);
-    }
-    else if(heuristic.localeCompare(string2)==0)
-    {
-        threshold=Math.max(Math.abs(startNode.row-finishNode.row),Math.abs(startNode.col-finishNode.col));
-        //console.log(threshold);
-    }
-    else if(heuristic.localeCompare(string3)==0)
-    {
-        threshold=Math.sqrt(Math.pow((startNode.row-finishNode.row),2)+Math.pow((startNode.col-finishNode.col),2));
-        //console.log(threshold);
-    }
+export function IDAstar(grid, startNode, finishNode,heuristic,diagonalallowed) {
+    var depth=1;
     while(1)
     {
-        var visitedNodesInOrder = [];
-        var ansarray=[];
-        var depth;
-        //console.log(grid);
-        depth=Find_depth(startNode,0,threshold,finishNode,heuristic,grid);
-        //console.log(grid);
-        ansarray=Search(visitedNodesInOrder,startNode,0,threshold,finishNode,heuristic,grid);
-        console.log(ansarray);
-        console.log(ansarray[ansarray[ansarray.length-1]]);
-        console.log(depth);
-        if(ansarray[ansarray.length-1].row==finishNode.row && ansarray[ansarray.length-1].col==finishNode.col)
+        //console.log("Hello");
+        var i=0;
+        getAllNodes(grid);
+        const visitedNodesInOrder = [];
+        var unvisitedNodes = []
+        startNode.distance = 0;
+        unvisitedNodes.push(startNode);
+        //console.log(startNode);
+        //console.log("Pushed");
+        //console.log(visitedNodesInOrder);
+        while(i<depth)
         {
-            console.log("Hippie");
-            return ansarray;
+            //console.log(visitedNodesInOrder);
+            //visitedNodesInOrder.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
+            //console.log(visitedNodesInOrder);
+            //console.log(visitedNodesInOrder);
+            if(unvisitedNodes.length==0)
+            {
+                console.log("Path not found");
+                return visitedNodesInOrder;
+            }
+            sortNodesByDistance(unvisitedNodes);
+            const closestNode = unvisitedNodes.shift();
+            if (closestNode.isWall && closestNode.wallweight==99999999) continue;
+            // If the closest node is at a distance of infinity,
+            // we must be trapped and should therefore stop.
+            if (closestNode.distance === Infinity) return visitedNodesInOrder;
+            if(closestNode === finishNode)
+            {
+                visitedNodesInOrder.push(finishNode)
+                return visitedNodesInOrder
+            }    
+            //console.log(closestNode);
+            closestNode.isVisited=true;
+            visitedNodesInOrder.push(closestNode);
+            const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid,diagonalallowed);
+            //console.log(unvisitedNeighbors);
+            for (const neighbor of unvisitedNeighbors) {
+                var value;
+                var string="Manhattan";
+                var string2="Diagonal";
+                var string3="Euclidean";
+                var string4="Octile";
+                var string5="Chebyshev";
+                if(heuristic.localeCompare(string)==0)
+                {
+                    value=Math.abs(neighbor.row-finishNode.row)+Math.abs(neighbor.col-finishNode.col);
+                    //console.log(value);
+                }
+                else if(heuristic.localeCompare(string2)==0)
+                {
+                    value=Math.max(Math.abs(neighbor.row-finishNode.row),Math.abs(neighbor.col-finishNode.col));
+                    //console.log(value);
+                }
+                else if(heuristic.localeCompare(string3)==0)
+                {
+                    value=Math.sqrt(Math.pow((neighbor.row-finishNode.row),2)+Math.pow((neighbor.col-finishNode.col),2));
+                    //console.log(value);
+                }
+                else if(heuristic.localeCompare(string4)==0)
+                {
+                    var x_dist=Math.abs(neighbor.row-finishNode.row);
+                    var y_dist=Math.abs(neighbor.col-finishNode.col);
+                    value=Math.max(x_dist,y_dist)+(Math.sqrt(2)-1) * Math.min(x_dist,y_dist);
+                    //console.log(value);
+                }
+                else if(heuristic.localeCompare(string5)==0)
+                {
+                    value=Math.max(Math.abs(neighbor.row-finishNode.row),Math.abs(neighbor.col-finishNode.col));
+                    //console.log(value);
+                }
+                neighbor.distance = value+closestNode.wallweight;
+                neighbor.previousNode = closestNode;
+                neighbor.isVisited = true;
+                unvisitedNodes.push(neighbor);
+                //console.log(neighbor);
+                //console.log(visitedNodesInOrder);
+                //console.log(depth);
+                if (neighbor === finishNode)
+                { 
+                    visitedNodesInOrder.push(finishNode);
+                    return visitedNodesInOrder;
+                }    
+            }
+            i=i+1;
+        
         }
-        else
-        {
-            console.log("update");
-            threshold=depth;     
-        }
+    depth=depth+1;
     }
-} 
+}
 
-function getUnvisitedNeighbors(node, grid) {
+function getAllNodes(grid) {
+    for (const row of grid) {
+      for (const node of row) {
+        node.isVisited = false;
+      }
+    }
+  }
+
+  
+  function getUnvisitedNeighbors(node, grid,diagonalallowed) {
     const neighbors = [];
     //console.log(node);
-    //console.log(grid);
     const col=node.col;
     const row=node.row;
-    //console.log(row);
-    //console.log(col);
     if (row > 0) neighbors.push(grid[row - 1][col]);
     if (row < grid.length - 1) neighbors.push(grid[row + 1][col]);
     if (col > 0) neighbors.push(grid[row][col - 1]);
     if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1]);
-    return neighbors.filter(neighbor => !neighbor.isVisited);
-}
-
-function Find_depth(node, g, threshold,finishNode,heuristic,grid)              
-{
-    var string="Manhattan";
-    var string2="Diagonal";
-    var string3="Euclidean";
-    var value;
-    if(heuristic.localeCompare(string)==0)
-    {
-        value=Math.abs(node.row-finishNode.row)+Math.abs(node.col-finishNode.col);
-        //console.log(value);
-    }
-    else if(heuristic.localeCompare(string2)==0)
-    {
-        value=Math.max(Math.abs(node.row-finishNode.row),Math.abs(node.col-finishNode.col));
-        //console.log(value);
-    }
-    else if(heuristic.localeCompare(string3)==0)
-    {
-        value=Math.sqrt(Math.pow((node.row-finishNode.row),2)+Math.pow((node.col-finishNode.col),2));
-        //console.log(value);
-    }
-    var f=g+value;
-    if(f>threshold)
-    {              //greater f encountered
-        return f;
-    }               //Goal node found
-    var min=Infinity;
-    const unvisitedNeighbors=getUnvisitedNeighbors(node, grid);
-    for (const tempnode of unvisitedNeighbors) 
-    {
-
-        //console.log("Hello");
-        var num=Math.sqrt(Math.pow((node.row-tempnode.row),2)+Math.pow((node.col-tempnode.col),2));
-        var temp=Find_depth(tempnode,g+num,threshold,finishNode,heuristic,grid);   //find the minimum of all ‘f’ greater than threshold encountered                                min=temp;
-        if(temp<min) 
-            min=temp
-    }
-    
-    return min;
-     //return the minimum ‘f’ encountered greater than threshold
-
-}
-function Search(visitedNodesInOrder,startNode,g,threshold,finishNode,heuristic,grid)
-{
+    if (diagonalallowed){
+        if (row > 0 && col > 0) neighbors.push(grid[row-1][col-1]);
+        if (row > 0 && col < grid[0].length - 1) neighbors.push(grid[row-1][col+1]);
+        if (row <  grid.length - 1 && col > 0 ) neighbors.push(grid[row+1][col-1]);
+        if (row <  grid.length - 1 && col < grid[0].length - 1) neighbors.push(grid[row+1][col+1]);
         
-    const unvisitedNeighbors=getUnvisitedNeighbors(startNode, grid)
-    for (const tempnode of unvisitedNeighbors) 
-        {
-
-            //recursive call with next node as current node for depth search  //find the minimum of all ‘f’ greater than threshold encountered                                min=temp;
-            //console.log(tempnode);
-            visitedNodesInOrder.push(tempnode);
-            //console.log(visitedNodesInOrder);
-            var num=Math.sqrt(Math.pow((startNode.row-tempnode.row),2)+Math.pow((startNode.col-tempnode.col),2));
-            if(tempnode.row==finishNode.row && tempnode.col==finishNode.col)
-            {
-                //console.log("Hurray");
-                //console.log(visitedNodesInOrder);
-                return visitedNodesInOrder;
-
-            }
-            visitedNodesInOrder=Search(visitedNodesInOrder,tempnode,g+num,threshold,finishNode,heuristic,grid); 
-            return visitedNodesInOrder;
-        }
-    
-}
+      }
+    return neighbors.filter(neighbor => !neighbor.isVisited);
+  }
+  function sortNodesByDistance(unvisitedNodes) {
+    unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
+  }
+  
+  
+  
+  // Backtracks from the finishNode to find the shortest path.
+  // Only works when called *after* the dijkstra method above.

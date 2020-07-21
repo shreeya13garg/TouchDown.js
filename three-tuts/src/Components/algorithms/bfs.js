@@ -1,23 +1,24 @@
-export function bfs(grid,startNode,finishNode){
+export function bfs(grid,startNode,finishNode,diagonalallowed){
   const visitedNodesInOrder = [];
   startNode.distance = 0;
   const queue = [startNode];
   while (!!queue.length){
     const closestNode = queue.shift();
-    if (closestNode.isWall) continue ;
+    if (closestNode.wallweight === 99999999) continue ;
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
     closestNode.isVisited = true;
     visitedNodesInOrder.push(closestNode);
     if (closestNode === finishNode) return visitedNodesInOrder;
-    const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid);
+    const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid,diagonalallowed);
     for (const neighbor of unvisitedNeighbors){
       neighbor.previousNode = closestNode;
       neighbor.isVisited = true;
-      neighbor.distance = closestNode.distance + 1;
+      neighbor.distance = closestNode.distance + neighbor.wallweight;
       queue.push(neighbor);
     }
 
   }
+  return visitedNodesInOrder
 }
 function sortNodesByDistance(unvisitedNodes) {
   unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
@@ -31,13 +32,20 @@ function updateUnvisitedNeighbors(node, grid) {
   }
 }
 
-function getUnvisitedNeighbors(node, grid) {
+function getUnvisitedNeighbors(node, grid,diagonalallowed) {
   const neighbors = [];
   const {col, row} = node;
   if (row > 0) neighbors.push(grid[row - 1][col]);
   if (row < grid.length - 1) neighbors.push(grid[row + 1][col]);
   if (col > 0) neighbors.push(grid[row][col - 1]);
   if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1]);
+  if (diagonalallowed){
+    if (row > 0 && col > 0) neighbors.push(grid[row-1][col-1]);
+    if (row > 0 && col < grid[0].length - 1) neighbors.push(grid[row-1][col+1]);
+    if (row <  grid.length - 1 && col > 0 ) neighbors.push(grid[row+1][col-1]);
+    if (row <  grid.length - 1 && col < grid[0].length - 1) neighbors.push(grid[row+1][col+1]);
+    
+  }
   return neighbors.filter(neighbor => !neighbor.isVisited);
 }
 

@@ -1,0 +1,291 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  background-image: url(images/marsmap1k.jpg);
+  /*background: black;*/
+  /*overflow: hidden;*/
+  /*display: flex;*/
+  /*justify-content: center;*/
+  align-items: center;
+}
+canvas {
+  position: static;
+  top: 200;
+  left: 100;
+  width: 100vw;
+  height: 80vh;
+}
+.grid {
+  margin: 20px 0 0;
+}
+.button-wrapper {
+  display: flex;
+  width: 100%;
+  padding-top: 10px;
+  /* padding-left: 12px; */
+  /* flex-direction: row; */
+}
+.button-wrapper2 {
+  display: inline-flex;
+  height: 75px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: rgba(66, 66, 66, 0.8);
+}
+.button {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  margin-right: 20px;
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background: black;
+  cursor: pointer;
+  color: white;
+}
+.button3 {
+  display: flex;
+  font-family: "Raleway", sans-serif;
+  font-size: 13px;
+  text-align: center;
+  align-items: center;
+  position: relative;
+  /* font-weight: bold; */
+  /* padding: 10px; */
+  /* margin-left: 0px; */
+  margin-right: 5px;
+  word-spacing: normal;
+  letter-spacing: 1px;
+  border: 0.5px solid white;
+  background: darkblue;
+  cursor: pointer;
+  color: white;
+  width: 120px;
+  height: 80px;
+}
+.button4 {
+  display: flex;
+  font-family: "Raleway", sans-serif;
+  font-size: 18px;
+  text-align: center;
+  align-items: center;
+  position: relative;
+  font-weight: 550;
+  margin-left: 10px;
+  margin-right: 5px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: white;
+  width: 120px;
+  height: 60px;
+}
+
+.inibutt {
+  /* height: 110px; */
+  /* background-color: lightcoral; */
+}
+
+.startend {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  /* margin-right: 20px; */
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background: black;
+  cursor: pointer;
+  color: white;
+  float: right;
+}
+
+.startend2 {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  /* margin-right: 20px; */
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background: black;
+  cursor: pointer;
+  color: white;
+  float: right;
+}
+
+.startend2:hover {
+  background-color: red;
+}
+
+.pathwall {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  /* margin-right: 20px; */
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background-color: #0b3b47;
+  cursor: pointer;
+  color: white;
+}
+
+.pauseresume:after {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  /* margin-right: 20px; */
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background: black;
+  cursor: pointer;
+  color: white;
+  float: right;
+  content: "Pause";
+}
+
+.pauseresume:focus:after,
+.pauseresume:active:after {
+  content: "Resume";
+}
+
+.startendwrap {
+  display: flex;
+  margin-right: 30px;
+  background-color: lightgreen;
+  float: right;
+}
+
+.iniwrap {
+  display: flex;
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 100px;
+  background-color: olivedrab;
+}
+
+.pathwall:hover {
+  background-color: #056d87;
+}
+
+.wallbutt {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  margin-left: 0px;
+  margin-right: 20px;
+  word-spacing: normal;
+  letter-spacing: 5px;
+  border: 1px solid white;
+  background: black;
+  cursor: pointer;
+  color: white;
+}
+
+.buttf {
+  width: 120px;
+  height: 60px;
+  background-color: crimson;
+  /* margin-left: 5px;
+  margin-right: 5px; */
+}
+
+.buttf2 {
+  /* background-color: green; */
+  width: 120px;
+  height: 210px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.buttonfi {
+  display: flex;
+  width: 120px;
+  background: black;
+  height: 60px;
+  border: 1px solid white;
+  text-align: center;
+  align-items: center;
+}
+
+.buttonfi a {
+  width: 120px;
+  font-family: "Raleway", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px;
+  text-align: center;
+  word-spacing: normal;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: white;
+}
+
+.optf {
+  position: relative;
+  /* position: absolute; */
+  width: 120px;
+  height: 0px;
+  background: #a09090;
+  transition: 0.5s;
+  cursor: pointer;
+  overflow: hidden;
+  /* display: none; */
+  transition: 0.5s linear 0s;
+}
+
+.optf li {
+  list-style: none;
+  position: relative;
+  padding: 10px;
+  height: 20px;
+  text-align: center;
+  text-decoration: none;
+  background: #262626;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  transition: 0.5s;
+}
+
+.buttf:hover .buttonfi {
+  background-color: darkblue;
+}
+
+.buttf:hover .optf {
+  height: 160px;
+}
+
+.optf li:hover {
+  background-color: darkblue;
+}
+
+.optf li:active {
+  background-color: crimson;
+}
+
+.buttf2:focus .buttonfi {
+  background-color: darkblue;
+}
+
+.buttf2:focus .optf {
+  height: 160px;
+}
+
+.buttf2:focus {
+  box-shadow: 2px 4px 20px 4px rgba(255, 255, 255, 0.75);
+  transform: scale(1.05);
+}

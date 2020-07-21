@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Canvas } from "react-three-fiber";
-import { bfs } from "./algorithms/bfs";
-import { getNodesInShortestPathOrder } from "./algorithms/dijkstra";
-import Controls from "./Controls";
+import { bfs } from "../algorithms/bfs";
+import { getNodesInShortestPathOrder } from "../algorithms/dijkstra";
+import Controls from "../Controls";
 import Point from "./Point";
 
 const START_NODE_ROW = 10;
@@ -29,7 +29,8 @@ export default class Grid extends Component {
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = bfs(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+    console.log(nodesInShortestPathOrder);
+    //this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
   render() {
@@ -37,6 +38,9 @@ export default class Grid extends Component {
     console.log(grid);
     return (
       <>
+        <button onClick={() => this.visualizeBFS()}>
+          Visualize BFS Algorithm
+        </button>
         <Canvas
           camera={{ position: [0, 0, 10] }}
           onCreated={({ camera }) => camera.lookAt(100, 100, 4)}

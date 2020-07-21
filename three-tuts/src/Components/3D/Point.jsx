@@ -24,9 +24,13 @@ export default class Point extends Component {
     //   : '';
 
     return (
-      <mesh position={[col - 15, row - 15, 0]} rotation={[0, 0, 0]}>
+      <mesh position={[col * 2, row * 2, 0]} rotation={[0, 0, 0]}>
         <boxBufferGeometry attach="geometry" args={[1, 1, 0]} />
-        <meshStandardMaterial attach="material" wireframe={true} />
+        <meshStandardMaterial
+          attach="material"
+          wireframe={false}
+          color="#a1251b"
+        />
       </mesh>
     );
   }

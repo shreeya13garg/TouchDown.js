@@ -1,9 +1,30 @@
 var Heap = require('heap');
-function heurestics(a,b){
-    return Math.sqrt((b.row-a.row)**2 + (b.col-a.col)**2)
+function heurestics(a,b,h){
+    if (h === 1){
+        // Euclidean
+       return Math.sqrt((b.row - a.row) ** 2 + (b.col - a.col) ** 2)
+    }
+    if (h === 2){
+        // Manhattan
+        return b.row - a.row + b.col - a.col
+    }
+    if (h === 3){
+        // octile
+        var a = Math.sqrt(2) - 1
+        var dx = b.row - a.row 
+        var dy = b.col - a.col
+        return dx + dy + (a- 2)*Math.min(dx,dy)
+
+    }
+    if (h === 4){
+        // chebyshev
+        var dx = b.row - a.row 
+        var dy = b.col - a.col
+        return Math.max(dx,dy)
+    }
 }
 function dblock(cX,cY,dX,dY,grid){
-    if (grid[cX-dX][cY].isWall && grid[cX][cY-dY].isWall){
+    if (grid[cX-dX][cY].wallweight > 99999998 && grid[cX][cY-dY].wallweight > 99999998){
         return true
     }
     return false
@@ -17,21 +38,21 @@ function blocked(cX,cY,dX,dY,grid){
         return true
     }
     if (dX !== 0 && dY !== 0){
-        if (grid[cX + dX][cY].isWall && grid[cX][cY+dY].isWall){
+        if (grid[cX + dX][cY].wallweight > 99999998&& grid[cX][cY+dY].wallweight > 99999998){
             return true
         }
-        if (grid[cX + dX][cY + dY].isWall){
+        if (grid[cX + dX][cY + dY].wallweight > 99999998){
             return true
         }
     }
     else{
         if (dX !== 0){
-            if (grid[cX+dX][cY].isWall){
+            if (grid[cX+dX][cY].wallweight > 99999998){
                 return true
             }
         }
         else{
-            if (grid[cX][cY+dY].isWall){
+            if (grid[cX][cY+dY].wallweight > 99999998){
                 return true
             }
         }
@@ -129,8 +150,8 @@ function identifySuccessors(node,grid,finishNode){
     }
     return successors
 }
-function length(curr,jumpPoint){
-    return heurestics(curr,jumpPoint)
+function length(curr,jumpPoint,h){
+    return heurestics(curr,jumpPoint,h)
 }
 function jump(cX,cY,dX,dY,grid,finishNode){
     var nX = cX + dX; var nY = cY + dY
@@ -195,7 +216,7 @@ function jump(cX,cY,dX,dY,grid,finishNode){
     }
     return jump(nX, nY, dX, dY, grid, finishNode)
 }
-export function jps(grid,startNode,finishNode){
+export function jps(grid,startNode,finishNode,h){
     var openList = new Heap(function(nodeA, nodeB) {return nodeA.fscore - nodeB.fscore})
     startNode.gscore = 0 ;
     startNode.fscore = 0 ; 
@@ -213,11 +234,11 @@ export function jps(grid,startNode,finishNode){
         for (var i = 0 ;i < successors.length;i++){
             var successor = successors[i];
             if (!successor.inclosed){
-                var val = node.gscore + length(node,successor)
+                var val = node.gscore + length(node,successor,h)
                 if (!successor.inopen || val < successor.gscore){
                     successor.gscore = val;
-                    successor.hscore = heurestics(successor,finishNode)
-                    successor.fscore = successor.gscore + successor.hscore
+                    successor.hscore = heurestics(successor,finishNode,h)
+                    successor.fscore = successor.gscore + successor.hscore*successor.wallweight
                     successor.previousNode = node
                     if (!successor.inopen){
                         openList.push(successor)
@@ -232,7 +253,7 @@ export function jps(grid,startNode,finishNode){
     }
     return visitedNodesInOrder
 }
-export function jpsans(finishNode,grid){
+export function jpsans(finishNode,grid,h){
     var curr = finishNode
     const nodesInShortestPathOrder = [];
     while (curr !== null){
